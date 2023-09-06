@@ -19,9 +19,7 @@ class Badminton extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const SizedBox(height: 60),
-            Container(
-              child: Image.asset('assets/images/hero_welcome.png'),
-            ),
+            Image.asset('assets/images/hero_welcome.png'),
             const SizedBox(
               height: 35,
             ),
