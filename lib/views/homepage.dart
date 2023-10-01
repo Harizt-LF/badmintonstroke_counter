@@ -31,11 +31,14 @@ class HomePageView extends StatelessWidget {
                     child: ListView.separated(
                         itemCount: 10,
                         separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(height: 10),
+                            const Divider(
+                              height: 10,
+                              color: Colors.white,
+                            ),
                         itemBuilder: (BuildContext context, index) {
                           return Container(
                             width: width,
-                            height: 100,
+                            height: 130,
                             child: Column(
                               children: [
                                 Flexible(
@@ -43,7 +46,11 @@ class HomePageView extends StatelessWidget {
                                   child: Container(
                                     alignment: Alignment.center,
                                     width: width,
-                                    color: const Color(0xFFFF299046),
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xFFFF299046),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20))),
                                     child: Text(
                                       'Sesi $index',
                                       style: const TextStyle(
@@ -54,7 +61,12 @@ class HomePageView extends StatelessWidget {
                                 Flexible(
                                     flex: 1,
                                     child: Container(
-                                      color: Colors.white,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(20),
+                                              bottomRight:
+                                                  Radius.circular(20))),
                                       child: const Padding(
                                         padding: EdgeInsets.all(8.0),
                                         child: Row(
@@ -62,18 +74,24 @@ class HomePageView extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text('01'),
                                                 Text('Gerakan')
                                               ],
                                             ),
                                             Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text('01'),
                                                 Text('Gerakan')
                                               ],
                                             ),
                                             Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text('01'),
                                                 Text('Gerakan')
