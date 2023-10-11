@@ -39,6 +39,7 @@ dependencies:
   flutter_blue: ^0.8.0
   flutter_blue_plus: ^1.17.3
   permission_handler: ^11.0.1
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +54,11 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: 'assets/images/badmincount_logo.png'
 
 # The following section is specific to Flutter packages.
 flutter:
