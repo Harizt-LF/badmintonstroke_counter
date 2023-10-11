@@ -13,7 +13,7 @@ class Badminton extends StatelessWidget {
         body: SafeArea(
           child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              child: Container(
+              child: SizedBox(
                 width: screenSize.width,
                 child: Expanded(
                   child: Column(

@@ -23,7 +23,7 @@ class SessionCard extends StatelessWidget {
               alignment: Alignment.center,
               width: width,
               decoration: const BoxDecoration(
-                  color: Color(0xFFFF299046),
+                  color: Color(0xFF299046),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
@@ -40,7 +40,7 @@ class SessionCard extends StatelessWidget {
           Flexible(
               flex: 1,
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     boxShadow: [
                       BoxShadow(color: Colors.black26, blurRadius: 3)
                     ],

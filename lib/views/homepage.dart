@@ -30,7 +30,7 @@ class HomePageView extends StatelessWidget {
             const SizedBox(height: 15),
             Flexible(
               flex: 5,
-              child: Container(
+              child: SizedBox(
                   width: width,
                   height: height,
                   child: dataLength < 1
@@ -39,13 +39,13 @@ class HomePageView extends StatelessWidget {
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
+                                SizedBox(
                                     height: 180,
                                     width: 180,
                                     child: Image.asset(
                                         'assets/images/dataMiss.png')),
-                                SizedBox(height: 10),
-                                Text(
+                                const SizedBox(height: 10),
+                                const Text(
                                   'Data Kosong !',
                                   style: TextStyle(
                                       fontFamily: 'assets/fonts/Poppins',
@@ -68,22 +68,22 @@ class HomePageView extends StatelessWidget {
                             );
                           })),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Flexible(
               fit: FlexFit.loose,
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ConnectBle()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ConnectBle()));
                 },
                 child: Container(
                   height: 50,
                   width: width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Color(0xFFFF299046),
+                    color: const Color(0xFF299046),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Tambahkan Data',

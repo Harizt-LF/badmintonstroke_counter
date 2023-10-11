@@ -1,10 +1,23 @@
-import 'package:badmintonstroke_counter/views/connect_to_ble.dart';
+import 'dart:io';
 import 'package:badmintonstroke_counter/views/homepage.dart';
 import 'package:flutter/material.dart';
-import 'package:badmintonstroke_counter/views/welcomepage.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
-  runApp(const BadmintonApp());
+  if (Platform.isAndroid) {
+    WidgetsFlutterBinding.ensureInitialized();
+    [
+      Permission.location,
+      Permission.storage,
+      Permission.bluetooth,
+      Permission.bluetoothConnect,
+      Permission.bluetoothScan
+    ].request().then((status) {
+      runApp(const BadmintonApp());
+    });
+  } else {
+    runApp(const BadmintonApp());
+  }
 }
 
 class BadmintonApp extends StatelessWidget {
