@@ -1,3 +1,4 @@
+import 'package:badmintonstroke_counter/views/connect_to_ble.dart';
 import 'package:flutter/material.dart';
 import 'package:badmintonstroke_counter/widgets/session_card.dart';
 
@@ -8,7 +9,7 @@ class HomePageView extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    int dataLength = 0;
+    int dataLength = 5;
 
     return Scaffold(
         appBar: AppBar(
@@ -70,14 +71,33 @@ class HomePageView extends StatelessWidget {
             SizedBox(height: 15),
             Flexible(
               fit: FlexFit.loose,
-              child: Container(
-                height: 50,
-                width: width,
-                color: Colors.amber,
-                child: Row(
-                  children: [
-                    Text('Tambahkan Data'),
-                  ],
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ConnectBle()));
+                },
+                child: Container(
+                  height: 50,
+                  width: width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Color(0xFFFF299046),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Tambahkan Data',
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      Icon(
+                        Icons.add,
+                        size: 20,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
                 ),
               ),
             )

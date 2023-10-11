@@ -12,7 +12,7 @@ class SessionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width,
       height: 130,
       child: Column(
@@ -22,14 +22,18 @@ class SessionCard extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               width: width,
-              decoration: BoxDecoration(
-                  color: const Color(0xFFFF299046),
+              decoration: const BoxDecoration(
+                  color: Color(0xFFFF299046),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
               child: Text(
                 'Session ${index + 1}',
-                style: const TextStyle(color: Colors.white, fontSize: 20),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
