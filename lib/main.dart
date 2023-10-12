@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:badmintonstroke_counter/views/counter_screen.dart';
 import 'package:badmintonstroke_counter/views/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -14,10 +13,10 @@ void main() {
       Permission.bluetoothConnect,
       Permission.bluetoothScan
     ].request().then((status) {
-      runApp(const CounterScreen());
+      runApp(const BadmintonApp());
     });
   } else {
-    runApp(const CounterScreen());
+    runApp(const BadmintonApp());
   }
 }
 
