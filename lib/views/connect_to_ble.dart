@@ -1,3 +1,4 @@
+import 'package:badmintonstroke_counter/views/counter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:async';
@@ -67,6 +68,8 @@ class _ConnectBleState extends State<ConnectBle> {
   Widget getDeviceMacId(ScanResult result) {
     return Text(result.device.remoteId.toString());
   }
+
+  void onConnected(ScanResult result, String sessionTitle) {}
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +148,7 @@ class _ConnectBleState extends State<ConnectBle> {
                   maxLines: 1,
                 ),
                 const SizedBox(height: 20),
-                Text(
+                const Text(
                   'Device tersedia',
                   style: TextStyle(
                       fontFamily: 'Poppins', fontWeight: FontWeight.bold),
@@ -157,7 +160,7 @@ class _ConnectBleState extends State<ConnectBle> {
                   child: _isScanning
                       ? Center(
                           child: CircularProgressIndicator(
-                          color: Color(0xFF299046),
+                          color: const Color(0xFF299046),
                           backgroundColor: Colors.white,
                         ))
                       : ListView.separated(
@@ -177,7 +180,14 @@ class _ConnectBleState extends State<ConnectBle> {
                                   children: [
                                     getDeviceName(result),
                                     InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CounterScreen(
+                                                        device:
+                                                            result.device)));
+                                      },
                                       child: Container(
                                         decoration: BoxDecoration(
                                             color: Colors.white,
