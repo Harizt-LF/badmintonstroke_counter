@@ -26,15 +26,11 @@ class _CounterScreenState extends State<CounterScreen> {
   var _actualValue = '';
   String targetDevice = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _lastValueSubscription =
-  //       _service[2].characteristics[0].lastValueStream.listen((value) {
-  //     _value = value;
-  //     setState(() {});
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    allInOne();
+  }
 
   // @override
   // void dispose() {
@@ -56,12 +52,31 @@ class _CounterScreenState extends State<CounterScreen> {
     });
   }
 
-  Future read() async {
+  // Future read() async {
+  //   final utf8Decoder = utf8.decoder;
+  //   _value = await _service[2].characteristics[0].read();
+  //   _actualValue = utf8Decoder.convert(_value);
+  //   setState(() {
+  //     _dataIsEmpty = false;
+  //   });
+  // }
+
+  Future allInOne() async {
     final utf8Decoder = utf8.decoder;
-    _value = await _service[2].characteristics[0].read();
-    _actualValue = utf8Decoder.convert(_value);
+    await widget.device.connect(timeout: Duration(seconds: 5));
+    _service = await widget.device.discoverServices();
     setState(() {
-      _dataIsEmpty = false;
+      _isConnected = true;
+      _isEmpty = false;
+    });
+    await _service[2].characteristics[0].setNotifyValue(true);
+    final _lastValueSubscription =
+        _service[2].characteristics[0].lastValueStream.listen((value) {
+      _value = value;
+      setState(() {
+        _actualValue = utf8Decoder.convert(_value);
+        _dataIsEmpty = false;
+      });
     });
   }
 
@@ -73,22 +88,22 @@ class _CounterScreenState extends State<CounterScreen> {
       ),
       body: Center(
         child: Column(children: [
-          FloatingActionButton(
-              onPressed: onConnect, child: Icon(Icons.bluetooth_connected)),
-          TextButton(
-            onPressed: () {
-              discoverServices();
-            },
-            child: Text(
-              widget.device.platformName.toString(),
-            ),
-          ),
+          // FloatingActionButton(
+          //     onPressed: onConnect, child: Icon(Icons.bluetooth_connected)),
+          // TextButton(
+          //   onPressed: () {
+          //     discoverServices();
+          //   },
+          //   child: Text(
+          //     widget.device.platformName.toString(),
+          //   ),
+          // ),
           Text(_isEmpty ? 'Gada data' : 'Ada data ${_service.length}'),
           Text(_isEmpty ? 'Maklo' : 'data ${_service[2].serviceUuid}'),
           Text(_isEmpty
               ? ''
               : 'banyak characteristic : ${_service[2].characteristics.length}'),
-          TextButton(onPressed: read, child: Text('Cari value')),
+          // TextButton(onPressed: read, child: Text('Cari value')),
           Text(_dataIsEmpty == false ? 'data ${_actualValue}' : 'No data')
           //TextButton(onPressed: read, child: Text('Read Data : ${_value.}')),
           // Text(_dataIsEmpty ? 'Data kosong ' : 'data : ${nilai.toString()}')
