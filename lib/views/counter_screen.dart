@@ -155,19 +155,22 @@ class _CounterScreenState extends State<CounterScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       FloatingActionButton(
-                          onPressed: () {
-                            if (_isResume) {
-                              stop();
-                            } else {
-                              resume();
-                            }
-                          },
-                          child: _isResume
-                              ? Icon(Icons.pause)
-                              : Icon(Icons.play_arrow)),
+                        onPressed: () {
+                          if (_isResume) {
+                            stop();
+                          } else {
+                            resume();
+                          }
+                        },
+                        child: _isResume
+                            ? Icon(Icons.pause)
+                            : Icon(Icons.play_arrow),
+                        backgroundColor:
+                            _isResume ? Colors.red : Color(0xFF299046),
+                      ),
                       FloatingActionButton(
                           onPressed: () {
-                            if (_isResume == false) {
+                            if (_isResume) {
                               //popup dialog error
                             } else {
                               //fungsi untuk push data ke database
