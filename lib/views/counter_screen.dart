@@ -31,8 +31,8 @@ class _CounterScreenState extends State<CounterScreen> {
   bool _isConnected = false;
   bool _isEmpty = true;
   bool _dataIsEmpty = true;
+  bool _isResume = true;
   var _actualValue = '';
-  String targetDevice = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
   @override
   void initState() {
@@ -43,6 +43,8 @@ class _CounterScreenState extends State<CounterScreen> {
   @override
   void dispose() {
     _lastValueSubscription.cancel();
+    widget.device.disconnect();
+    print("Laman ini ditutup");
     super.dispose();
   }
 
@@ -100,59 +102,144 @@ class _CounterScreenState extends State<CounterScreen> {
 
   Future stop() async {
     await _service[2].characteristics[0].setNotifyValue(false);
+    setState(() {
+      _isResume = false;
+    });
   }
 
   Future resume() async {
     await _service[2].characteristics[0].setNotifyValue(true);
+    setState(() {
+      _isResume = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: _isConnected ? Text('Terhubung') : Text('Tidak Terhubung'),
+          leading: Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: CircleAvatar(
+                backgroundColor: _isConnected ? Colors.blue : Colors.red),
+          ),
+          title: Text(widget.SessionName.toString()),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF299046)),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 20),
+                  MoveCounter(
+                    counterSmash: _counterSmash,
+                    moveName: 'SMASH',
+                  ),
+                  SizedBox(height: 20),
+                  MoveCounter(
+                    counterSmash: _counterDrive,
+                    moveName: 'FOREHAND DRIVE',
+                  ),
+                  SizedBox(height: 20),
+                  MoveCounter(
+                    counterSmash: _counterService,
+                    moveName: 'SERVE',
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FloatingActionButton(
+                          onPressed: () {
+                            if (_isResume) {
+                              stop();
+                            } else {
+                              resume();
+                            }
+                          },
+                          child: _isResume
+                              ? Icon(Icons.pause)
+                              : Icon(Icons.play_arrow)),
+                      FloatingActionButton(
+                          onPressed: () {
+                            if (_isResume == false) {
+                              //popup dialog error
+                            } else {
+                              //fungsi untuk push data ke database
+                            }
+                          },
+                          child: Icon(Icons.check))
+                    ],
+                  ),
+                  Text('Gerakan sekarang : $_actualValue'),
+                  // Text(widget.SessionName.toString()),
+                  // Text(_isEmpty ? 'Gada data' : 'Ada data ${_service.length}'),
+                  // Text(_isEmpty ? 'Maklo' : 'data ${_service[2].serviceUuid}'),
+                  // Text(_isEmpty
+                  //     ? ''
+                  //     : 'banyak characteristic : ${_service[2].characteristics.length}'),
+                  // // TextButton(onPressed: read, child: Text('Cari value')),
+                  // Text(_dataIsEmpty == false ? 'data[${_actualValue}]' : 'No data'),
+                  // Text(_dataIsEmpty == false
+                  //     ? 'Banyak gerakan drive : ${_counterDrive}'
+                  //     : '0'),
+                  // Text(_dataIsEmpty == false
+                  //     ? 'Banyak gerakan drive : ${_counterSmash}'
+                  //     : '0'),
+                  // Text(_dataIsEmpty == false
+                  //     ? 'Banyak gerakan drive : ${_counterService}'
+                  //     : '0'),
+                  // FloatingActionButton(onPressed: stop),
+                  // FloatingActionButton(onPressed: resume),
+                ]),
+          ),
+        ),
       ),
-      body: Center(
-        child: Column(children: [
-          // FloatingActionButton(
-          //     onPressed: onConnect, child: Icon(Icons.bluetooth_connected)),
-          // TextButton(
-          //   onPressed: () {
-          //     discoverServices();
-          //   },
-          //   child: Text(
-          //     widget.device.platformName.toString(),
-          //   ),
-          // ),
-          Text(widget.SessionName.toString()),
-          Text(_isEmpty ? 'Gada data' : 'Ada data ${_service.length}'),
-          Text(_isEmpty ? 'Maklo' : 'data ${_service[2].serviceUuid}'),
-          Text(_isEmpty
-              ? ''
-              : 'banyak characteristic : ${_service[2].characteristics.length}'),
-          // TextButton(onPressed: read, child: Text('Cari value')),
-          Text(_dataIsEmpty == false ? 'data[${_actualValue}]' : 'No data'),
-          Text(_dataIsEmpty == false
-              ? 'Banyak gerakan drive : ${_counterDrive}'
-              : '0'),
-          Text(_dataIsEmpty == false
-              ? 'Banyak gerakan drive : ${_counterSmash}'
-              : '0'),
-          Text(_dataIsEmpty == false
-              ? 'Banyak gerakan drive : ${_counterService}'
-              : '0'),
-          FloatingActionButton(onPressed: stop),
-          FloatingActionButton(onPressed: resume),
+    );
+  }
+}
 
-          //TextButton(onPressed: read, child: Text('Read Data : ${_value.}')),
-          // Text(_dataIsEmpty ? 'Data kosong ' : 'data : ${nilai.toString()}')
-          // ListView.builder(
-          //   itemCount: _service.length,
-          //   itemBuilder: (BuildContext context, index) {
-          //     return Text('Ini datanya bang : ${_service[index].serviceUuid}');
-          //   },
-          // )
-        ]),
+class MoveCounter extends StatelessWidget {
+  const MoveCounter({
+    super.key,
+    required int counterSmash,
+    required String this.moveName,
+  }) : _counterSmash = counterSmash;
+
+  final int _counterSmash;
+  final String moveName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      color: Color(0xFF299046),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            moveName,
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
+          ),
+          SizedBox(width: 30),
+          Text(
+            _counterSmash.toString(),
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
+          )
+        ],
       ),
     );
   }
