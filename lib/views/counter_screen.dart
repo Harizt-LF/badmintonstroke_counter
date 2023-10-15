@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class CounterScreen extends StatefulWidget {
-  const CounterScreen({super.key, required this.device});
+  const CounterScreen(
+      {super.key, required this.device, required this.SessionName});
 
   final BluetoothDevice device;
+  final String SessionName;
 
   @override
   State<CounterScreen> createState() => _CounterScreenState();
@@ -17,6 +19,12 @@ class _CounterScreenState extends State<CounterScreen> {
   List<BluetoothService> _service = [];
   late StreamSubscription<List<int>> _lastValueSubscription;
   List<int> _value = [];
+  int _counterDrive = 0;
+  int _counterSmash = 0;
+  int _counterService = 0;
+  String Drive = 'DRIVE FOREHAND';
+  String Smash = 'SMASH';
+  String Service = 'SERVICE';
   var nilai = '';
   bool _isDiscoveringServices = false;
   bool _isConnecting = false;
@@ -32,11 +40,11 @@ class _CounterScreenState extends State<CounterScreen> {
     allInOne();
   }
 
-  // @override
-  // void dispose() {
-  //   _lastValueSubscription.cancel();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _lastValueSubscription.cancel();
+    super.dispose();
+  }
 
   Future discoverServices() async {
     _service = await widget.device.discoverServices();
@@ -73,11 +81,29 @@ class _CounterScreenState extends State<CounterScreen> {
     final _lastValueSubscription =
         _service[2].characteristics[0].lastValueStream.listen((value) {
       _value = value;
+      _actualValue = utf8Decoder.convert(_value);
+      if (_actualValue.toString().contains(Drive)) {
+        _counterDrive = _counterDrive + 1;
+      } else if (_actualValue.toString().contains(Smash)) {
+        _counterSmash = _counterSmash + 1;
+      } else if (_actualValue.toString().contains(Service)) {
+        _counterService = _counterService + 1;
+      }
       setState(() {
-        _actualValue = utf8Decoder.convert(_value);
+        _counterDrive = _counterDrive;
+        _counterSmash = _counterSmash;
+        _counterService = _counterService;
         _dataIsEmpty = false;
       });
     });
+  }
+
+  Future stop() async {
+    await _service[2].characteristics[0].setNotifyValue(false);
+  }
+
+  Future resume() async {
+    await _service[2].characteristics[0].setNotifyValue(true);
   }
 
   @override
@@ -98,13 +124,26 @@ class _CounterScreenState extends State<CounterScreen> {
           //     widget.device.platformName.toString(),
           //   ),
           // ),
+          Text(widget.SessionName.toString()),
           Text(_isEmpty ? 'Gada data' : 'Ada data ${_service.length}'),
           Text(_isEmpty ? 'Maklo' : 'data ${_service[2].serviceUuid}'),
           Text(_isEmpty
               ? ''
               : 'banyak characteristic : ${_service[2].characteristics.length}'),
           // TextButton(onPressed: read, child: Text('Cari value')),
-          Text(_dataIsEmpty == false ? 'data ${_actualValue}' : 'No data')
+          Text(_dataIsEmpty == false ? 'data[${_actualValue}]' : 'No data'),
+          Text(_dataIsEmpty == false
+              ? 'Banyak gerakan drive : ${_counterDrive}'
+              : '0'),
+          Text(_dataIsEmpty == false
+              ? 'Banyak gerakan drive : ${_counterSmash}'
+              : '0'),
+          Text(_dataIsEmpty == false
+              ? 'Banyak gerakan drive : ${_counterService}'
+              : '0'),
+          FloatingActionButton(onPressed: stop),
+          FloatingActionButton(onPressed: resume),
+
           //TextButton(onPressed: read, child: Text('Read Data : ${_value.}')),
           // Text(_dataIsEmpty ? 'Data kosong ' : 'data : ${nilai.toString()}')
           // ListView.builder(

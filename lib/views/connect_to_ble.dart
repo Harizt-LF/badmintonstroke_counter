@@ -185,8 +185,10 @@ class _ConnectBleState extends State<ConnectBle> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     CounterScreen(
-                                                        device:
-                                                            result.device)));
+                                                      device: result.device,
+                                                      SessionName:
+                                                          textController.text,
+                                                    )));
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
