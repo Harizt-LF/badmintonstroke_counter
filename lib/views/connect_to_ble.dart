@@ -186,7 +186,7 @@ class _ConnectBleState extends State<ConnectBle> {
                                                 builder: (context) =>
                                                     CounterScreen(
                                                       device: result.device,
-                                                      SessionName:
+                                                      sessionName:
                                                           textController.text,
                                                     )));
                                       },

@@ -6,10 +6,10 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class CounterScreen extends StatefulWidget {
   const CounterScreen(
-      {super.key, required this.device, required this.SessionName});
+      {super.key, required this.device, required this.sessionName});
 
   final BluetoothDevice device;
-  final String SessionName;
+  final String sessionName;
 
   @override
   State<CounterScreen> createState() => _CounterScreenState();
@@ -22,9 +22,9 @@ class _CounterScreenState extends State<CounterScreen> {
   int _counterDrive = 0;
   int _counterSmash = 0;
   int _counterService = 0;
-  String Drive = 'DRIVE FOREHAND';
-  String Smash = 'SMASH';
-  String Service = 'SERVICE';
+  String drive = 'DRIVE FOREHAND';
+  String smash = 'SMASH';
+  String service = 'SERVICE';
   var nilai = '';
   bool _isDiscoveringServices = false;
   bool _isConnecting = false;
@@ -44,7 +44,6 @@ class _CounterScreenState extends State<CounterScreen> {
   void dispose() {
     _lastValueSubscription.cancel();
     widget.device.disconnect();
-    print("Laman ini ditutup");
     super.dispose();
   }
 
@@ -56,7 +55,7 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 
   Future onConnect() async {
-    await widget.device.connect(timeout: Duration(seconds: 5));
+    await widget.device.connect(timeout: const Duration(seconds: 5));
     setState(() {
       _isConnected = true;
     });
@@ -73,7 +72,7 @@ class _CounterScreenState extends State<CounterScreen> {
 
   Future allInOne() async {
     final utf8Decoder = utf8.decoder;
-    await widget.device.connect(timeout: Duration(seconds: 5));
+    await widget.device.connect(timeout: const Duration(seconds: 5));
     _service = await widget.device.discoverServices();
     setState(() {
       _isConnected = true;
@@ -84,11 +83,11 @@ class _CounterScreenState extends State<CounterScreen> {
         _service[2].characteristics[0].lastValueStream.listen((value) {
       _value = value;
       _actualValue = utf8Decoder.convert(_value);
-      if (_actualValue.toString().contains(Drive)) {
+      if (_actualValue.toString().contains(drive)) {
         _counterDrive = _counterDrive + 1;
-      } else if (_actualValue.toString().contains(Smash)) {
+      } else if (_actualValue.toString().contains(smash)) {
         _counterSmash = _counterSmash + 1;
-      } else if (_actualValue.toString().contains(Service)) {
+      } else if (_actualValue.toString().contains(service)) {
         _counterService = _counterService + 1;
       }
       setState(() {
@@ -119,11 +118,11 @@ class _CounterScreenState extends State<CounterScreen> {
     return Scaffold(
       appBar: AppBar(
           leading: Padding(
-            padding: EdgeInsets.only(left: 20),
+            padding: const EdgeInsets.only(left: 20),
             child: CircleAvatar(
                 backgroundColor: _isConnected ? Colors.blue : Colors.red),
           ),
-          title: Text(widget.SessionName.toString()),
+          title: Text(widget.sessionName.toString()),
           centerTitle: true,
           backgroundColor: const Color(0xFF299046)),
       body: Container(
@@ -135,22 +134,22 @@ class _CounterScreenState extends State<CounterScreen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   MoveCounter(
                     counterSmash: _counterSmash,
                     moveName: 'SMASH',
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   MoveCounter(
                     counterSmash: _counterDrive,
                     moveName: 'FOREHAND DRIVE',
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   MoveCounter(
                     counterSmash: _counterService,
                     moveName: 'SERVE',
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -163,10 +162,10 @@ class _CounterScreenState extends State<CounterScreen> {
                           }
                         },
                         child: _isResume
-                            ? Icon(Icons.pause)
-                            : Icon(Icons.play_arrow),
+                            ? const Icon(Icons.pause)
+                            : const Icon(Icons.play_arrow),
                         backgroundColor:
-                            _isResume ? Colors.red : Color(0xFF299046),
+                            _isResume ? Colors.red : const Color(0xFF299046),
                       ),
                       FloatingActionButton(
                           onPressed: () {
@@ -176,7 +175,7 @@ class _CounterScreenState extends State<CounterScreen> {
                               //fungsi untuk push data ke database
                             }
                           },
-                          child: Icon(Icons.check))
+                          child: const Icon(Icons.check))
                     ],
                   ),
                   Text('Gerakan sekarang : $_actualValue'),
@@ -221,22 +220,22 @@ class MoveCounter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      color: Color(0xFF299046),
+      color: const Color(0xFF299046),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             moveName,
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: Colors.white),
           ),
-          SizedBox(width: 30),
+          const SizedBox(width: 30),
           Text(
             _counterSmash.toString(),
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 30,
                 fontWeight: FontWeight.bold,

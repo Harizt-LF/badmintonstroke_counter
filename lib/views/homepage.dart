@@ -1,9 +1,23 @@
 import 'package:badmintonstroke_counter/views/connect_to_ble.dart';
 import 'package:flutter/material.dart';
 import 'package:badmintonstroke_counter/widgets/session_card.dart';
+import 'package:badmintonstroke_counter/database/database.dart';
 
-class HomePageView extends StatelessWidget {
+class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
+
+  @override
+  State<HomePageView> createState() => _HomePageViewState();
+}
+
+class _HomePageViewState extends State<HomePageView> {
+  DatabaseInstance databaseInstance = DatabaseInstance();
+
+  @override
+  void initState() {
+    databaseInstance.database();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
