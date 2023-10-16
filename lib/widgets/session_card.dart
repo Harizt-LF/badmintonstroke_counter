@@ -5,10 +5,20 @@ class SessionCard extends StatelessWidget {
     super.key,
     required this.width,
     required this.index,
+    required this.sessionName,
+    required this.serveCount,
+    required this.smashCount,
+    required this.driveCount,
+    required this.createdAt,
   });
 
   final double width;
   final int index;
+  final String? sessionName;
+  final int? serveCount;
+  final int? smashCount;
+  final int? driveCount;
+  final String? createdAt;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +38,7 @@ class SessionCard extends StatelessWidget {
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
               child: Text(
-                'Session ${index + 1}',
+                'Session $sessionName',
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -48,22 +58,22 @@ class SessionCard extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20))),
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.only(left: 20, right: 20, top: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [Text('01'), Text('Gerakan')],
+                        children: [Text('$serveCount'), Text('Serve')],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [Text('01'), Text('Gerakan')],
+                        children: [Text('$smashCount'), Text('Smash')],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [Text('01'), Text('Gerakan')],
+                        children: [Text('$driveCount'), Text('Forehand Drive')],
                       ),
                     ],
                   ),

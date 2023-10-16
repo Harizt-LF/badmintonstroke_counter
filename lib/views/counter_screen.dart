@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:badmintonstroke_counter/database/database.dart';
 
 class CounterScreen extends StatefulWidget {
   const CounterScreen(
@@ -16,6 +17,8 @@ class CounterScreen extends StatefulWidget {
 }
 
 class _CounterScreenState extends State<CounterScreen> {
+  DatabaseInstance databaseInstance = DatabaseInstance();
+
   List<BluetoothService> _service = [];
   late StreamSubscription<List<int>> _lastValueSubscription;
   List<int> _value = [];
@@ -38,6 +41,7 @@ class _CounterScreenState extends State<CounterScreen> {
   void initState() {
     super.initState();
     allInOne();
+    databaseInstance.database();
   }
 
   @override
@@ -113,6 +117,17 @@ class _CounterScreenState extends State<CounterScreen> {
     });
   }
 
+  Future saveData() async {
+    await databaseInstance.insert({
+      'session_name': widget.sessionName,
+      'serve_count': _counterService,
+      'smash_count': _counterSmash,
+      'drive_count': _counterDrive,
+      'created_at': DateTime.now().toString()
+    });
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,6 +194,7 @@ class _CounterScreenState extends State<CounterScreen> {
                     ],
                   ),
                   Text('Gerakan sekarang : $_actualValue'),
+                  FloatingActionButton(onPressed: saveData)
                   // Text(widget.SessionName.toString()),
                   // Text(_isEmpty ? 'Gada data' : 'Ada data ${_service.length}'),
                   // Text(_isEmpty ? 'Maklo' : 'data ${_service[2].serviceUuid}'),
