@@ -61,7 +61,7 @@ class _ConnectBleState extends State<ConnectBle> {
       name = 'N/A';
     }
     return Text(name,
-        style: TextStyle(
+        style: const TextStyle(
             fontFamily: 'Poppins', fontSize: 16, color: Colors.white));
   }
 
@@ -153,14 +153,14 @@ class _ConnectBleState extends State<ConnectBle> {
                   style: TextStyle(
                       fontFamily: 'Poppins', fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   width: width,
                   height: 300,
                   child: _isScanning
-                      ? Center(
+                      ? const Center(
                           child: CircularProgressIndicator(
-                          color: const Color(0xFF299046),
+                          color: Color(0xFF299046),
                           backgroundColor: Colors.white,
                         ))
                       : ListView.separated(
@@ -169,7 +169,7 @@ class _ConnectBleState extends State<ConnectBle> {
                             return Container(
                               width: width,
                               decoration: BoxDecoration(
-                                  color: Color(0xFF299046),
+                                  color: const Color(0xFF299046),
                                   borderRadius: BorderRadius.circular(10)),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -181,22 +181,25 @@ class _ConnectBleState extends State<ConnectBle> {
                                     getDeviceName(result),
                                     InkWell(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
                                                 builder: (context) =>
                                                     CounterScreen(
                                                       device: result.device,
                                                       sessionName:
                                                           textController.text,
-                                                    )));
+                                                    )))
+                                            .then((value) {
+                                          setState(() {});
+                                        });
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(4)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(5.0),
                                           child: Row(
                                             children: [
                                               Text(
@@ -218,7 +221,7 @@ class _ConnectBleState extends State<ConnectBle> {
                             );
                           },
                           separatorBuilder: (context, index) {
-                            return SizedBox(height: 10);
+                            return const SizedBox(height: 10);
                           },
                           itemCount: _scanResults.length),
                 )

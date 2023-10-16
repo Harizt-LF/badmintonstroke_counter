@@ -29,8 +29,8 @@ class _CounterScreenState extends State<CounterScreen> {
   String smash = 'SMASH';
   String service = 'SERVICE';
   var nilai = '';
-  bool _isDiscoveringServices = false;
-  bool _isConnecting = false;
+  // bool _isDiscoveringServices = false;
+  // bool _isConnecting = false;
   bool _isConnected = false;
   bool _isEmpty = true;
   bool _dataIsEmpty = true;
@@ -51,19 +51,19 @@ class _CounterScreenState extends State<CounterScreen> {
     super.dispose();
   }
 
-  Future discoverServices() async {
-    _service = await widget.device.discoverServices();
-    setState(() {
-      _isEmpty = false;
-    });
-  }
+  // Future discoverServices() async {
+  //   _service = await widget.device.discoverServices();
+  //   setState(() {
+  //     _isEmpty = false;
+  //   });
+  // }
 
-  Future onConnect() async {
-    await widget.device.connect(timeout: const Duration(seconds: 5));
-    setState(() {
-      _isConnected = true;
-    });
-  }
+  // Future onConnect() async {
+  //   await widget.device.connect(timeout: const Duration(seconds: 5));
+  //   setState(() {
+  //     _isConnected = true;
+  //   });
+  // }
 
   // Future read() async {
   //   final utf8Decoder = utf8.decoder;
@@ -123,8 +123,9 @@ class _CounterScreenState extends State<CounterScreen> {
       'serve_count': _counterService,
       'smash_count': _counterSmash,
       'drive_count': _counterDrive,
-      'created_at': DateTime.now().toString()
+      'created_at': DateTime.now()
     });
+    await widget.device.disconnect();
     Navigator.pop(context);
   }
 
@@ -169,51 +170,28 @@ class _CounterScreenState extends State<CounterScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       FloatingActionButton(
-                        onPressed: () {
-                          if (_isResume) {
-                            stop();
-                          } else {
-                            resume();
-                          }
-                        },
-                        child: _isResume
-                            ? const Icon(Icons.pause)
-                            : const Icon(Icons.play_arrow),
-                        backgroundColor:
-                            _isResume ? Colors.red : const Color(0xFF299046),
-                      ),
-                      FloatingActionButton(
                           onPressed: () {
                             if (_isResume) {
-                              //popup dialog error
+                              stop();
                             } else {
-                              //fungsi untuk push data ke database
+                              resume();
                             }
                           },
-                          child: const Icon(Icons.check))
+                          backgroundColor:
+                              _isResume ? Colors.red : const Color(0xFF299046),
+                          child: _isResume
+                              ? const Icon(Icons.pause)
+                              : const Icon(Icons.play_arrow)),
+                      FloatingActionButton(
+                        onPressed: saveData,
+                        backgroundColor: _isResume
+                            ? Color(0xFF299046).withOpacity(0.3)
+                            : Color(0xFF299046),
+                        child: const Icon(Icons.check),
+                      )
                     ],
                   ),
                   Text('Gerakan sekarang : $_actualValue'),
-                  FloatingActionButton(onPressed: saveData)
-                  // Text(widget.SessionName.toString()),
-                  // Text(_isEmpty ? 'Gada data' : 'Ada data ${_service.length}'),
-                  // Text(_isEmpty ? 'Maklo' : 'data ${_service[2].serviceUuid}'),
-                  // Text(_isEmpty
-                  //     ? ''
-                  //     : 'banyak characteristic : ${_service[2].characteristics.length}'),
-                  // // TextButton(onPressed: read, child: Text('Cari value')),
-                  // Text(_dataIsEmpty == false ? 'data[${_actualValue}]' : 'No data'),
-                  // Text(_dataIsEmpty == false
-                  //     ? 'Banyak gerakan drive : ${_counterDrive}'
-                  //     : '0'),
-                  // Text(_dataIsEmpty == false
-                  //     ? 'Banyak gerakan drive : ${_counterSmash}'
-                  //     : '0'),
-                  // Text(_dataIsEmpty == false
-                  //     ? 'Banyak gerakan drive : ${_counterService}'
-                  //     : '0'),
-                  // FloatingActionButton(onPressed: stop),
-                  // FloatingActionButton(onPressed: resume),
                 ]),
           ),
         ),

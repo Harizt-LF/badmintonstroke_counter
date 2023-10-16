@@ -12,18 +12,23 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
-  DatabaseInstance databaseInstance = DatabaseInstance();
+  DatabaseInstance? databaseInstance;
 
   @override
   void initState() {
-    databaseInstance.database();
-    refresh();
+    databaseInstance = DatabaseInstance();
+    dbInit();
     super.initState();
   }
 
-  Future refresh() async {
-    await databaseInstance.getData();
+  Future dbInit() async {
+    await databaseInstance!.database();
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -36,125 +41,130 @@ class _HomePageViewState extends State<HomePageView> {
           backgroundColor: const Color(0xFF299046),
           title: const Text('Halo, User !'),
         ),
-        body: RefreshIndicator(
-          onRefresh: refresh,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 20),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text(
-                'Sesi Permainan',
-                style: TextStyle(
-                    fontFamily: 'assets/fonts/Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20),
-              ),
-              const SizedBox(height: 15),
-              Flexible(
-                flex: 5,
-                child: SizedBox(
-                    width: width,
-                    height: height,
-                    child: FutureBuilder<List<DatacountModel>>(
-                        future: databaseInstance.getData(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.separated(
-                              itemCount: snapshot.data!.length,
-                              separatorBuilder: (context, index) {
-                                return Divider(
-                                  height: 10,
-                                  color: Colors.white,
-                                );
-                              },
-                              itemBuilder: (context, index) {
-                                return SessionCard(
-                                    width: width,
-                                    index: index,
-                                    sessionName:
-                                        snapshot.data![index].sessionName,
-                                    serveCount:
-                                        snapshot.data![index].serveCount,
-                                    smashCount:
-                                        snapshot.data![index].smashCount,
-                                    driveCount:
-                                        snapshot.data![index].driveCount,
-                                    createdAt: snapshot.data![index].createdAt);
-                              },
-                            );
-                          } else {
-                            return Expanded(
-                                child: Center(
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                        height: 180,
-                                        width: 180,
-                                        child: Image.asset(
-                                            'assets/images/dataMiss.png')),
-                                    const SizedBox(height: 10),
-                                    const Text(
-                                      'Data Kosong !',
-                                      style: TextStyle(
-                                          fontFamily: 'assets/fonts/Poppins',
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20),
-                                    ),
-                                  ]),
-                            ));
-                          }
-                        })
-                    //     : ListView.separated(
-                    //         itemCount: dataLength,
-                    //         separatorBuilder: (BuildContext context, int index) =>
-                    //             const Divider(
-                    //               height: 10,
-                    //               color: Colors.white,
-                    //             ),
-                    //         itemBuilder: (BuildContext context, index) {
-                    //           return SessionCard(
-                    //             width: width,
-                    //             index: index,
-                    //           );
-                    //         }),
-                    ),
-              ),
-              const SizedBox(height: 15),
-              Flexible(
-                fit: FlexFit.loose,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ConnectBle()));
-                  },
-                  child: Container(
-                    height: 50,
-                    width: width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xFF299046),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Tambahkan Data',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white)),
-                        Icon(
-                          Icons.add,
-                          size: 20,
-                          color: Colors.white,
-                        )
-                      ],
-                    ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 20),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text(
+              'Sesi Permainan',
+              style: TextStyle(
+                  fontFamily: 'assets/fonts/Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20),
+            ),
+            const SizedBox(height: 15),
+            Flexible(
+              flex: 5,
+              child: SizedBox(
+                  width: width,
+                  height: height,
+                  child: databaseInstance != null
+                      ? FutureBuilder<List<DatacountModel>?>(
+                          future: databaseInstance!.getData(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data!.length == 0) {
+                                return Expanded(
+                                    child: Center(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                            height: 180,
+                                            width: 180,
+                                            child: Image.asset(
+                                                'assets/images/dataMiss.png')),
+                                        const SizedBox(height: 10),
+                                        const Text(
+                                          'Data Kosong !',
+                                          style: TextStyle(
+                                              fontFamily:
+                                                  'assets/fonts/Poppins',
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 20),
+                                        ),
+                                      ]),
+                                ));
+                              }
+                              return ListView.separated(
+                                  itemCount: snapshot.data!.length,
+                                  separatorBuilder: (context, index) {
+                                    return const Divider(
+                                      height: 10,
+                                      color: Colors.white,
+                                    );
+                                  },
+                                  itemBuilder: (context, index) {
+                                    return SessionCard(
+                                        width: width,
+                                        index: index,
+                                        sessionName:
+                                            snapshot.data![index].sessionName,
+                                        serveCount:
+                                            snapshot.data![index].serveCount,
+                                        smashCount:
+                                            snapshot.data![index].smashCount,
+                                        driveCount:
+                                            snapshot.data![index].driveCount,
+                                        createdAt:
+                                            snapshot.data![index].createdAt);
+                                  });
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: Color(0xFF299046),
+                                  backgroundColor: Colors.white,
+                                ),
+                              );
+                            }
+                          })
+                      : const Center(
+                          child: Text('NULL'),
+                          // child: CircularProgressIndicator(
+                          //   color: const Color(0xFF299046),
+                          //   backgroundColor: Colors.white,
+                          // ),
+                        )),
+            ),
+            const SizedBox(height: 15),
+            Flexible(
+              fit: FlexFit.loose,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (builder) {
+                    return const ConnectBle();
+                  })).then((value) {
+                    setState(() {});
+                  });
+                },
+                child: Container(
+                  height: 50,
+                  width: width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color(0xFF299046),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Tambahkan Data',
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      Icon(
+                        Icons.add,
+                        size: 20,
+                        color: Colors.white,
+                      )
+                    ],
                   ),
                 ),
-              )
-            ]),
-          ),
+              ),
+            )
+          ]),
         ));
   }
 }

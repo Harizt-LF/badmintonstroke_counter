@@ -38,7 +38,7 @@ class SessionCard extends StatelessWidget {
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
               child: Text(
-                'Session $sessionName',
+                '$sessionName',
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -59,21 +59,24 @@ class SessionCard extends StatelessWidget {
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20))),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 15),
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [Text('$serveCount'), Text('Serve')],
+                        children: [Text('$serveCount'), const Text('Serve')],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [Text('$smashCount'), Text('Smash')],
+                        children: [Text('$smashCount'), const Text('Smash')],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [Text('$driveCount'), Text('Forehand Drive')],
+                        children: [
+                          Text('$driveCount'),
+                          const Text('Forehand Drive')
+                        ],
                       ),
                     ],
                   ),
