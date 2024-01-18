@@ -15,6 +15,9 @@ class DatabaseInstance {
   final String serveCount = 'serve_count';
   final String smashCount = 'smash_count';
   final String driveCount = 'drive_count';
+  final String wServeCount = 'wrong_serve_count';
+  final String wSmashCount = 'wrong_smash_count';
+  final String wDriveCount = 'wrong_drive_count';
   final String createdAt = 'created_at';
 
   Database? _database;
@@ -33,7 +36,7 @@ class DatabaseInstance {
 
   Future _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE $table ($id INTEGER PRIMARY KEY, $sessionName TEXT NULL,$serveCount INTEGER NULL, $smashCount INTEGER NULL, $driveCount INTEGER  NULL, $createdAt TEXT NULL)');
+        'CREATE TABLE $table ($id INTEGER PRIMARY KEY, $sessionName TEXT NULL,$serveCount INTEGER NULL, $smashCount INTEGER NULL, $driveCount INTEGER  NULL, $wServeCount INTEGER NULL, $wSmashCount INTEGER NULL, $wDriveCount INTEGER NULL, $createdAt TEXT NULL)');
   }
 
   Future<List<DatacountModel>> getData() async {

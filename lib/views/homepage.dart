@@ -1,5 +1,6 @@
 import 'package:badmintonstroke_counter/database/datacount_model.dart';
 import 'package:badmintonstroke_counter/views/connect_to_ble.dart';
+import 'package:badmintonstroke_counter/views/detailpage.dart';
 import 'package:flutter/material.dart';
 import 'package:badmintonstroke_counter/widgets/session_card.dart';
 import 'package:badmintonstroke_counter/database/database.dart';
@@ -96,19 +97,32 @@ class _HomePageViewState extends State<HomePageView> {
                                     );
                                   },
                                   itemBuilder: (context, index) {
-                                    return SessionCard(
-                                        width: width,
-                                        index: index,
-                                        sessionName:
-                                            snapshot.data![index].sessionName,
-                                        serveCount:
-                                            snapshot.data![index].serveCount,
-                                        smashCount:
-                                            snapshot.data![index].smashCount,
-                                        driveCount:
-                                            snapshot.data![index].driveCount,
-                                        createdAt:
-                                            snapshot.data![index].createdAt);
+                                    return InkWell(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DetailPage(
+                                                        data: snapshot
+                                                            .data![index])))
+                                            .then((value) {
+                                          setState(() {});
+                                        });
+                                      },
+                                      child: SessionCard(
+                                          width: width,
+                                          index: index,
+                                          sessionName:
+                                              snapshot.data![index].sessionName,
+                                          serveCount:
+                                              snapshot.data![index].serveCount,
+                                          smashCount:
+                                              snapshot.data![index].smashCount,
+                                          driveCount:
+                                              snapshot.data![index].driveCount,
+                                          createdAt:
+                                              snapshot.data![index].createdAt),
+                                    );
                                   });
                             } else {
                               return const Center(

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:badmintonstroke_counter/database/database.dart';
+import 'package:intl/intl.dart';
 
 class CounterScreen extends StatefulWidget {
   const CounterScreen(
@@ -25,9 +26,9 @@ class _CounterScreenState extends State<CounterScreen> {
   int _counterDrive = 0;
   int _counterSmash = 0;
   int _counterService = 0;
-  String drive = 'DRIVE FOREHAND';
-  String smash = 'SMASH';
-  String service = 'SERVICE';
+  int _counterSmashSalah = 0;
+  int _counterDriveSalah = 0;
+  int _counterServeSalah = 0;
   var nilai = '';
   // bool _isDiscoveringServices = false;
   // bool _isConnecting = false;
@@ -36,6 +37,7 @@ class _CounterScreenState extends State<CounterScreen> {
   bool _dataIsEmpty = true;
   bool _isResume = true;
   var _actualValue = '';
+  var now = DateTime.now();
 
   @override
   void initState() {
@@ -87,17 +89,26 @@ class _CounterScreenState extends State<CounterScreen> {
         _service[2].characteristics[0].lastValueStream.listen((value) {
       _value = value;
       _actualValue = utf8Decoder.convert(_value);
-      if (_actualValue.toString().contains(drive)) {
+      if (_actualValue.toString() == 'DRIVE') {
         _counterDrive = _counterDrive + 1;
-      } else if (_actualValue.toString().contains(smash)) {
+      } else if (_actualValue.toString() == 'SMASH') {
         _counterSmash = _counterSmash + 1;
-      } else if (_actualValue.toString().contains(service)) {
+      } else if (_actualValue.toString() == 'SERVE') {
         _counterService = _counterService + 1;
+      } else if (_actualValue.toString() == 'WS') {
+        _counterSmashSalah = _counterSmashSalah + 1;
+      } else if (_actualValue.toString() == 'WD') {
+        _counterDriveSalah = _counterDriveSalah + 1;
+      } else if (_actualValue.toString() == 'WSV') {
+        _counterServeSalah = _counterServeSalah + 1;
       }
       setState(() {
         _counterDrive = _counterDrive;
         _counterSmash = _counterSmash;
         _counterService = _counterService;
+        _counterDriveSalah = _counterDriveSalah;
+        _counterSmashSalah = _counterSmashSalah;
+        _counterServeSalah = _counterServeSalah;
         _dataIsEmpty = false;
       });
     });
@@ -118,12 +129,18 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 
   Future saveData() async {
+    print('Data Disimpan');
+    var _createdAt = DateFormat.yMd().add_jm().format(now);
+    print(_createdAt);
     await databaseInstance.insert({
       'session_name': widget.sessionName,
       'serve_count': _counterService,
       'smash_count': _counterSmash,
       'drive_count': _counterDrive,
-      'created_at': DateTime.now()
+      'wrong_serve_count': _counterServeSalah,
+      'wrong_smash_count': _counterSmashSalah,
+      'wrong_drive_count': _counterDriveSalah,
+      'created_at': _createdAt
     });
     await widget.device.disconnect();
     Navigator.pop(context);
