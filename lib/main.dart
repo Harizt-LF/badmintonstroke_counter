@@ -1,5 +1,7 @@
 import 'dart:io';
-import 'package:badmintonstroke_counter/views/homepage.dart';
+import 'package:badmintonstroke_counter/views/counter_screen.dart';
+import 'package:badmintonstroke_counter/views/detailpage.dart';
+// import 'package:badmintonstroke_counter/views/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -28,7 +30,7 @@ class BadmintonApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Badmintcount',
-      home: HomePageView(),
+      home: DetailPage(),
     );
   }
 }

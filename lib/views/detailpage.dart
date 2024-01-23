@@ -3,16 +3,20 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class DetailPage extends StatelessWidget {
-  final DatacountModel data;
+  // final DatacountModel data;
 
-  const DetailPage({super.key, required this.data});
+  const DetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var smashBenar = 23;
+    var smashBenar = 10;
+    var serveBenar = 6;
+    var driveBenar = 15;
     var smashSalah = 3;
+    var serveSalah = 2;
+    var driveSalah = 4;
     var totalSmash = smashBenar + smashSalah;
 
     return Scaffold(
@@ -47,7 +51,7 @@ class DetailPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15)),
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          right: 18.0, left: 18.0, top: 18),
+                          right: 18.0, left: 18.0, top: 18, bottom: 18),
                       child: Container(
                         height: 190,
                         child: Row(
@@ -63,33 +67,103 @@ class DetailPage extends StatelessWidget {
                             SizedBox(width: 20),
                             Expanded(
                               child: Container(
+                                // color: Colors.amber,
+                                height: double.maxFinite,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    const Text(
-                                      'Data Pukulan',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                    Expanded(
+                                      flex: 2,
+                                      child: const Text(
+                                        'Data Pukulan',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                    Text(
-                                      'Pada bagian ini anda bisa melihat statistik hasil rekaman data pukulan',
-                                      textAlign: TextAlign.right,
-                                      // overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.white,
-                                        fontSize: 12,
+                                    Expanded(flex: 2, child: SizedBox()),
+                                    Expanded(
+                                      flex: 8,
+                                      child: RadarChart(RadarChartData(
+                                          radarShape: RadarShape.circle,
+                                          titleTextStyle: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 8,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                          getTitle: (index, angle) {
+                                            switch (index) {
+                                              case 0:
+                                                return RadarChartTitle(
+                                                  text: 'SMASH',
+                                                  angle: angle,
+                                                );
+                                              case 2:
+                                                return RadarChartTitle(
+                                                  text: 'DRIVE',
+                                                  angle: angle,
+                                                );
+                                              case 1:
+                                                return RadarChartTitle(
+                                                    text: 'SERVE',
+                                                    angle: angle);
+                                              default:
+                                                return const RadarChartTitle(
+                                                    text: '');
+                                            }
+                                          },
+                                          // radarBackgroundColor: Colors.white,
+                                          tickCount: 1,
+                                          tickBorderData:
+                                              BorderSide(color: Colors.black12),
+                                          ticksTextStyle: TextStyle(
+                                              color: Colors.transparent),
+                                          radarBorderData:
+                                              BorderSide(color: Colors.white24),
+                                          dataSets: [
+                                            RadarDataSet(
+                                                // borderColor: Color(0xFF299046),
+                                                borderWidth: 1,
+                                                entryRadius: 3,
+                                                dataEntries: [
+                                                  RadarEntry(
+                                                      value: smashBenar
+                                                          .toDouble()),
+                                                  RadarEntry(
+                                                      value: serveBenar
+                                                          .toDouble()),
+                                                  RadarEntry(
+                                                      value:
+                                                          driveBenar.toDouble())
+                                                ]),
+                                          ])),
+                                    ),
+                                    Expanded(flex: 2, child: SizedBox()),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Text(
+                                        'Lihat distribusi pukulan yang anda lakukan',
+                                        textAlign: TextAlign.right,
+                                        overflow: TextOverflow.clip,
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                        ),
+                                        softWrap: true,
                                       ),
                                     ),
-                                    Expanded(child: SizedBox()),
-                                    Text('${data.createdAt}'),
-                                    SizedBox(
-                                      height: 50,
-                                    )
+                                    // Expanded(child: SizedBox()),
+                                    // Text('Tanggal'),
+                                    // SizedBox(
+                                    //   height: 50,
+                                    // )
                                   ],
                                 ),
                               ),
@@ -113,23 +187,23 @@ class DetailPage extends StatelessWidget {
                           DetailCard(
                               title: 'Forehand Drive',
                               width: width,
-                              benar: data.driveCount,
-                              salah: smashSalah,
-                              total: totalSmash),
+                              benar: driveBenar,
+                              salah: driveSalah,
+                              total: driveBenar + driveSalah),
                           SizedBox(height: 20),
                           DetailCard(
                               title: 'Serve',
                               width: width,
-                              benar: data.serveCount,
-                              salah: 4,
-                              total: 9),
+                              benar: serveBenar,
+                              salah: serveSalah,
+                              total: serveBenar + serveSalah),
                           SizedBox(height: 20),
                           DetailCard(
                               title: 'Smash',
                               width: width,
-                              benar: data.smashCount,
-                              salah: 6,
-                              total: 15)
+                              benar: smashBenar,
+                              salah: smashSalah,
+                              total: smashSalah + smashBenar)
                         ],
                       ),
                     ),

@@ -95,11 +95,11 @@ class _CounterScreenState extends State<CounterScreen> {
         _counterSmash = _counterSmash + 1;
       } else if (_actualValue.toString() == 'SERVE') {
         _counterService = _counterService + 1;
-      } else if (_actualValue.toString() == 'WS') {
+      } else if (_actualValue.toString() == 'WRONG SMASH') {
         _counterSmashSalah = _counterSmashSalah + 1;
-      } else if (_actualValue.toString() == 'WD') {
+      } else if (_actualValue.toString() == 'WRONG DRVE') {
         _counterDriveSalah = _counterDriveSalah + 1;
-      } else if (_actualValue.toString() == 'WSV') {
+      } else if (_actualValue.toString() == 'WRONG SERVE') {
         _counterServeSalah = _counterServeSalah + 1;
       }
       setState(() {
